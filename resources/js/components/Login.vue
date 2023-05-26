@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 import { useUsers } from "../store/user";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+import { router } from "../router";
 const $toast = useToast();
 
 const userStore = useUsers();
@@ -19,7 +20,9 @@ function handleLogin() {
                     type: "error",
                     position: "top-right",
                 });
+                return 0;
             }
+            router.push("/");
         })
         .catch((error) => {
             console.log(error);
