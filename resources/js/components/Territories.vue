@@ -22,7 +22,11 @@ function expandChildren() {
 
 <template>
     <div class="territories__parent" @click="expandChildren">
-        <i v-if="hasChild" class="fas fa-play territories__parent-icon"></i>
+        <i
+            v-if="hasChild"
+            class="fas fa-play territories__parent-icon"
+            :class="{ 'fa-rotate-90': isExpanded === true }"
+        ></i>
         <h4 class="territories__parent-name">
             {{ name }}
         </h4>
