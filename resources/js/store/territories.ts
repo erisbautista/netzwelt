@@ -6,8 +6,8 @@ const api = useApi();
 export interface Territories {
     id: string;
     name: string;
-    parent?: string;
     child: Territories[];
+    parent?: string;
 }
 
 interface TerritoriesData {

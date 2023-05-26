@@ -4,28 +4,37 @@ export default {
 };
 </script>
 <script lang="ts" setup>
+import { ref } from "vue";
 import { Territories } from "../store/territories";
 
+const isExpanded = ref(false);
 const props = defineProps<{
     filterTerritories: Territories[];
+    name: string;
+    hasChild: boolean;
 }>();
 
-function getChild(territories) {}
+function expandChildren() {
+    console.log("triggered");
+    isExpanded.value = !isExpanded.value;
+}
 </script>
 
 <template>
-    <template v-for="territories in filterTerritories" :key="territories.id">
-        <div class="territories__parent" @click="getChild(territories)">
-            <i
-                v-if="territories.child.length !== 0"
-                class="fas fa-play territories__parent-icon"
-            ></i>
-            <h4 class="territories__parent-name">{{ territories.name }}</h4>
-        </div>
-        <div class="territories__child" v-if="territories.child.length !== 0">
-            <TerritoriesVue
-                :filter-territories="territories.child"
-            ></TerritoriesVue>
-        </div>
-    </template>
+    <div class="territories__parent" @click="expandChildren">
+        <i v-if="hasChild" class="fas fa-play territories__parent-icon"></i>
+        <h4 class="territories__parent-name">
+            {{ name }}
+        </h4>
+    </div>
+    <div class="territories__child">
+        <TerritoriesVue
+            v-if="isExpanded"
+            v-for="territories in filterTerritories"
+            :name="territories.name"
+            :key="territories.id"
+            :has-child="territories.child.length !== 0"
+            :filter-territories="territories.child"
+        ></TerritoriesVue>
+    </div>
 </template>

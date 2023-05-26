@@ -1,3 +1,8 @@
+<script lang="ts">
+export default {
+    name: "Home",
+};
+</script>
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useTerritories, Territories } from "../store/territories";
@@ -30,6 +35,14 @@ function getChild(territories: Territories) {
     <div class="territories">
         <h1>Territories</h1>
         <h3>Here are the list of territories</h3>
-        <TerritoriesVue :filter-territories="places"></TerritoriesVue>
+        <div class="territory">
+            <TerritoriesVue
+                v-for="territories in places"
+                :name="territories.name"
+                :key="territories.id"
+                :has-child="territories.child.length !== 0"
+                :filter-territories="territories.child"
+            ></TerritoriesVue>
+        </div>
     </div>
 </template>
