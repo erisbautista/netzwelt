@@ -1,23 +1,35 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useTerritories } from "../store/territories";
+import { useTerritories, Territories } from "../store/territories";
+import TerritoriesVue from "./Territories.vue";
+import { ref } from "vue";
 
 const territoriesStore = useTerritories();
+const places = ref<Territories[]>([]);
 
-onMounted(() => {
-    territoriesStore.getTerritories();
+onMounted(async () => {
+    await territoriesStore.getTerritories();
+    places.value = territoriesStore.filterTerritories;
+    places.value.map((oPlace) => {
+        getChild(oPlace);
+    });
 });
+
+function getChild(territories: Territories) {
+    const child: Territories[] = [];
+    territoriesStore.territoriesWithChild.map((oData, iIndex) => {
+        if (territories.id === oData.parent) {
+            child.push(oData);
+            territories.child = child;
+        }
+    });
+}
 </script>
 
 <template>
     <div class="territories">
         <h1>Territories</h1>
         <h3>Here are the list of territories</h3>
-        <div
-            class="territories__data"
-            v-for="territories in territoriesStore.data"
-        >
-            <p>{{ territories.name }}</p>
-        </div>
+        <TerritoriesVue :filter-territories="places"></TerritoriesVue>
     </div>
 </template>

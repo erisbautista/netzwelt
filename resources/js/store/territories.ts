@@ -3,7 +3,7 @@ import { useApi } from "../api/adapter";
 
 const api = useApi();
 
-interface Territories {
+export interface Territories {
     id: string;
     name: string;
     parent?: string;
@@ -33,16 +33,27 @@ export const useTerritories = defineStore("territories", {
         },
     },
     getters: {
-        filterTerritories: (state) => {
-            const territories: Territories[] = [];
+        territoriesWithChild: (state) => {
+            const territoriesWithChild: Territories[] = [];
             state.data.map((oData, iIndex) => {
-                territories.push({ ...oData });
-                territories[iIndex].child = [];
+                territoriesWithChild.push({ ...oData });
+                territoriesWithChild[iIndex].child = [];
                 state.data.map((place) => {
-                    if (place.parent === oData.parent) {
-                        territories[iIndex]["child"].push(place);
+                    if (place.parent === oData.id) {
+                        place.child = [];
+                        territoriesWithChild[iIndex].child.push(place);
                     }
                 });
+            });
+            return territoriesWithChild;
+        },
+        filterTerritories: (state) => {
+            const territories: Territories[] = [];
+            state.data.map((oData) => {
+                if (oData.parent === null) {
+                    oData.child = [];
+                    territories.push({ ...oData });
+                }
             });
             return territories;
         },
