@@ -25,9 +25,9 @@ export const useUsers = defineStore("users", {
                     });
             });
         },
-        getTerritories() {
+        checkUser() {
             return new Promise((resolve, reject) => {
-                api.get("/territories")
+                api.get("/check-user")
                     .then((result) => {
                         resolve(result.data);
                     })
